@@ -1,0 +1,878 @@
+{
+	"info": {
+		"_postman_id": "98fd1b74-c9b2-4bd4-84ce-175af62105d0",
+		"name": "HomeTaskJava3Lesson2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21352994"
+	},
+	"item": [
+		{
+			"name": "GET complexSearch",
+			"item": [
+				{
+					"name": "SmockingTestComplexSearch",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response time is less than 900ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(900);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.test(\"Check number of finded\", function () {\r",
+									"var totalResults = jsonData.totalResults;\r",
+									"console.log(totalResults+\">\"+numberOfFindedResultsRec+\"?\"+\" typeof: \"+typeof numberOfFindedResultsRec);\r",
+									"pm.expect(totalResults).to.greaterThan(numberOfFindedResultsRec);\r",
+									"pm.environment.set(\"maxNumberResults\",totalResults);\r",
+									"});\r",
+									"pm.test(\"Check number of pages\", function () {\r",
+									"var number = jsonData.number;\r",
+									"pm.expect(number).to.greaterThan(numberOfSearchingPages);\r",
+									"pm.environment.set(\"maxNumberPages\",number);\r",
+									"});\r",
+									"pm.test(\"Check record numberOfFindedResultsRec and numberOfSearchingPages\", function () {\r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Record example of finded\", function () {\r",
+									"    var example = jsonData.results[0].title;\r",
+									"    var idRecipes = jsonData.results[0].id;\r",
+									"    console.log(idRecipes+\":\"+example)\r",
+									"pm.environment.set(\"example\",example);\r",
+									"pm.environment.set(\"idRecipes\",idRecipes);\r",
+									"\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"      numberOfSearchingPages=parseInt(pm.environment.get(\"numberOfSearchingPages\"));\r",
+									"            numberOfFindedResultsRec=parseInt(pm.environment.get(\"numberOfFindedResultsRec\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "a594516bd10c4eeb83a5fe805f4da69c",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "query",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "apiKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.spoonacular.com/recipes/complexSearch?query=green",
+							"protocol": "https",
+							"host": [
+								"api",
+								"spoonacular",
+								"com"
+							],
+							"path": [
+								"recipes",
+								"complexSearch"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "green"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SchemaTest",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var schema ={\r",
+									"    //https://www.jsonschema.net/app/schemas/0\r",
+									"    \"$schema\": \"testingComplexSearch\",\r",
+									"    \"$id\": \"testComplexSearch\",\r",
+									"    \"type\": \"object\",\r",
+									"    \"required\": [\r",
+									"        \"results\",\r",
+									"        \"offset\",\r",
+									"        \"number\",\r",
+									"        \"totalResults\"\r",
+									"    ],\r",
+									"    \"properties\": {\r",
+									"        \"results\": {\r",
+									"            \"type\": \"array\"\r",
+									"           \r",
+									"        },\r",
+									"        \"offset\": {\r",
+									"            \"type\": \"integer\"\r",
+									"        },\r",
+									"        \"number\": {\r",
+									"            \"type\": \"integer\"\r",
+									"        },\r",
+									"        \"totalResults\": {\r",
+									"            \"type\": \"integer\"\r",
+									"        }\r",
+									"    }\r",
+									"}\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.test('Schema Valid', () => {\r",
+									"    var carrier = JSON.parse(responseBody); \r",
+									"    pm.expect(tv4.validate(carrier, schema)).to.be.true\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "a594516bd10c4eeb83a5fe805f4da69c",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "query",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "apiKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.spoonacular.com/recipes/complexSearch?query={{example}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"spoonacular",
+								"com"
+							],
+							"path": [
+								"recipes",
+								"complexSearch"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "{{example}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SchemaTest variant 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Body is correct\", function () {\r",
+									"\r",
+									"    responseJson = JSON.parse(responseBody);\r",
+									"var count = Object.keys(responseJson).length;\r",
+									"console.log(count);\r",
+									"tests[\"Validate service included JSON with 4 keys\"] = count === 4;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "a594516bd10c4eeb83a5fe805f4da69c",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "query",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "apiKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.spoonacular.com/recipes/complexSearch?query={{example}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"spoonacular",
+								"com"
+							],
+							"path": [
+								"recipes",
+								"complexSearch"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "{{example}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "IdTest",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.test(\"Resultes with random id request\", function () {\r",
+									"      numberOfFindedResultsRec=parseInt(pm.environment.get(\"numberOfFindedResultsRec\"));\r",
+									"var totalResults = jsonData.totalResults;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "a594516bd10c4eeb83a5fe805f4da69c",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "query",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "apiKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.spoonacular.com/recipes/complexSearch?Id= {{$guid}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"spoonacular",
+								"com"
+							],
+							"path": [
+								"recipes",
+								"complexSearch"
+							],
+							"query": [
+								{
+									"key": "Id",
+									"value": " {{$guid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CheckSearchingFound",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.test(\"Equal id and title of recipes for finded early\", function () {\r",
+									"    var example = jsonData.results[0].title;\r",
+									"    var idRecipes = jsonData.results[0].id;\r",
+									"    console.log(idRecipes+\":\"+example)\r",
+									"var exampleEarly=pm.environment.get(\"example\");\r",
+									"var idRecipesEarly=pm.environment.get(\"idRecipes\");\r",
+									"pm.expect(example).to.eql(exampleEarly);\r",
+									"pm.expect(idRecipesEarly).to.eql(idRecipes);\r",
+									"\r",
+									"\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.spoonacular.com/recipes/complexSearch?query={{example}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"spoonacular",
+								"com"
+							],
+							"path": [
+								"recipes",
+								"complexSearch"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "{{example}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ErrorOfQuery",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Test of client error\", function () {\r",
+									"pm.response.to.be.clientError\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "a594516bd10c4eeb83a5fe805f4da69c",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "query",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "apiKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.spoonacular.com/recipes/complexSearch?recipeBoxId=green",
+							"protocol": "https",
+							"host": [
+								"api",
+								"spoonacular",
+								"com"
+							],
+							"path": [
+								"recipes",
+								"complexSearch"
+							],
+							"query": [
+								{
+									"key": "recipeBoxId",
+									"value": "green"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "WithoutOtherError",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.sendRequest(\"https://postman-echo.com/get\", function (err, response) {\r",
+									"    console.log(response.json());\r",
+									"});\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches text\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(example);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"example=pm.environment.get(\"example\")"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "a594516bd10c4eeb83a5fe805f4da69c",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "query",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "apiKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.spoonacular.com/recipes/complexSearch?query={{example}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"spoonacular",
+								"com"
+							],
+							"path": [
+								"recipes",
+								"complexSearch"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "{{example}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POST cuisine",
+			"item": [
+				{
+					"name": "SmockingTestRecipesCuisine",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);\r",
+									"});\r",
+									"pm.test (\"testResponce\", function () {\r",
+									"pm.sendRequest(\"https://postman-echo.com/get\", function (err, response) {\r",
+									"    console.log(response.json());\r",
+									"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "https://api.spoonacular.com/recipes/cuisine",
+							"protocol": "https",
+							"host": [
+								"api",
+								"spoonacular",
+								"com"
+							],
+							"path": [
+								"recipes",
+								"cuisine"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SchemaTest2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var schema ={\r",
+									"    //https://www.jsonschema.net/app/schemas/0\r",
+									"    \"$schema\": \"forPOSTTestRecipesCuisine\",\r",
+									"    \"$id\": \"TestRecipesCuisine\",\r",
+									"    \"type\": \"object\",\r",
+									"        \"required\": [\r",
+									"        \"cuisine\",\r",
+									"        \"cuisines\",\r",
+									"        \"confidence\"\r",
+									"    ],\r",
+									"    \"properties\": {\r",
+									"        \"cuisine\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The cuisine Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"Mediterranean\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"cuisines\": {\r",
+									"            \"type\": \"array\",\r",
+									"            \"default\": [],\r",
+									"            \"title\": \"The cuisines Schema\",\r",
+									"            \"items\": {\r",
+									"                \"type\": \"string\",\r",
+									"                \"title\": \"A Schema\",\r",
+									"                \"examples\": [\r",
+									"                    \"Mediterranean\",\r",
+									"                    \"European\",\r",
+									"                    \"Italian\"\r",
+									"                ]\r",
+									"            },\r",
+									"            \"examples\": [\r",
+									"                [\"Mediterranean\",\r",
+									"                    \"European\",\r",
+									"                    \"Italian\"\r",
+									"                ]\r",
+									"            ]\r",
+									"        },\r",
+									"        \"confidence\": {\r",
+									"            \"type\": \"number\",\r",
+									"            \"default\": 0.0,\r",
+									"            \"title\": \"The confidence Schema\",\r",
+									"            \"examples\": [\r",
+									"                0.0\r",
+									"            ]\r",
+									"        }\r",
+									"    },\r",
+									"    \"examples\": [{\r",
+									"        \"cuisine\": \"Mediterranean\",\r",
+									"        \"cuisines\": [\r",
+									"            \"Mediterranean\",\r",
+									"            \"European\",\r",
+									"            \"Italian\"\r",
+									"        ],\r",
+									"        \"confidence\": 0.0\r",
+									"    }]\r",
+									"}\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.test('Schema Valid', () => {\r",
+									"    var carrier = JSON.parse(responseBody); \r",
+									"    pm.expect(tv4.validate(carrier, schema)).to.be.true\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "a594516bd10c4eeb83a5fe805f4da69c",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "query",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "apiKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "https://api.spoonacular.com/recipes/cuisine",
+							"protocol": "https",
+							"host": [
+								"api",
+								"spoonacular",
+								"com"
+							],
+							"path": [
+								"recipes",
+								"cuisine"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SchemaTest2 variant 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Body is correct\", function () {\r",
+									"\r",
+									"    responseJson = JSON.parse(responseBody);\r",
+									"var count = Object.keys(responseJson).length;\r",
+									"console.log(count);\r",
+									"tests[\"Validate service included JSON with 4 keys\"] = count === 3;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "a594516bd10c4eeb83a5fe805f4da69c",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "query",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "apiKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "https://api.spoonacular.com/recipes/cuisine",
+							"protocol": "https",
+							"host": [
+								"api",
+								"spoonacular",
+								"com"
+							],
+							"path": [
+								"recipes",
+								"cuisine"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LastGoodBayTest",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test (\"SayGoodBayLoosers\", function(){\r",
+									"pm.test(\"Part1 Say me way?\",function (){\r",
+									"    pm.globals.set(\"variable_key\",\"123\");});\r",
+									" pm.test(\"Part2 Your request very important for us!\",function (){\r",
+									"     pm.globals.unset(\"variable_key\");\r",
+									"    });   \r",
+									"pm.test(\"Part2 Continue to be... Very very important!\",function (){\r",
+									"console.log(pm.globals.get(\"variable_key\"))\r",
+									"});\r",
+									"pm.test(\"Part3 If beauty must die then\",function (){\r",
+									"console.log(pm.globals.get(\"variable_key\"))\r",
+									"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "a594516bd10c4eeb83a5fe805f4da69c",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "query",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "apiKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "https://api.spoonacular.com/recipes/cuisine",
+							"protocol": "https",
+							"host": [
+								"api",
+								"spoonacular",
+								"com"
+							],
+							"path": [
+								"recipes",
+								"cuisine"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{apiKey2}}",
+				"type": "string"
+			},
+			{
+				"key": "in",
+				"value": "query",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "apiKey",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
